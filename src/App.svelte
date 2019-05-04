@@ -1,4 +1,7 @@
 <script>
+	let newTodo = "";
+	let tempId = 4;
+
 	let todos = [
 	  {
 	    id: 1,
@@ -19,6 +22,20 @@
 	    editing: false
 	  }
 	];
+
+	const addTodo = event => {
+	  if (event.key === "Enter") {
+	    const todo = {
+	      id: tempId,
+	      title: event.target.value,
+	      completed: false,
+	      editing: false
+	    };
+	    todos = [...todos, todo];
+	    newTodo = "";
+	    tempId = tempId + 1;
+	  }
+	};
 </script>
 
 <style lang="scss">
@@ -110,7 +127,8 @@
 <div class="container">
   <img src={'/img/svelte-logo-horizontal.svg'} alt="svelte logo" class="logo">
 
-  <input type="text" class="todo-input" placeholder="What needs to be done">
+  <input type="text" class="todo-input" placeholder="What needs to be done"
+  bind:value={newTodo} on:keydown={addTodo}>
 
 {#each todos as todo}
   <div class="todo-item">
