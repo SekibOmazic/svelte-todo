@@ -1,4 +1,24 @@
 <script>
+	let todos = [
+	  {
+	    id: 1,
+	    title: "Learn Svelte",
+	    completed: false,
+	    editing: false
+	  },
+	  {
+	    id: 2,
+	    title: "Learn GraphQl",
+	    completed: false,
+	    editing: false
+	  },
+	  {
+	    id: 3,
+	    title: "Learn Flutter",
+	    completed: false,
+	    editing: false
+	  }
+	];
 </script>
 
 <style lang="scss">
@@ -92,33 +112,17 @@
 
   <input type="text" class="todo-input" placeholder="What needs to be done">
 
+{#each todos as todo}
   <div class="todo-item">
     <div class="todo-item-left">
       <input type="checkbox">
-      <div class="todo-item-label">Todo Title</div>
+      <div class="todo-item-label">{todo.title}</div>
     </div>
     <div class="remove-item">
       &times;
     </div>
   </div>
-  <div class="todo-item">
-    <div class="todo-item-left">
-      <input type="checkbox" v-model="todo.completed">
-      <div class="todo-item-label">Todo Title</div>
-    </div>
-    <div class="remove-item">
-      &times;
-    </div>
-  </div>
-  <div class="todo-item">
-    <div class="todo-item-left">
-      <input type="checkbox" v-model="todo.completed">
-      <div class="todo-item-label">Todo Title</div>
-    </div>
-    <div class="remove-item">
-      &times;
-    </div>
-  </div>
+  {/each}
 
 
   <div class="extra-container">
