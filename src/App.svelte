@@ -38,6 +38,8 @@
 	};
 
 	const deleteTodo = id => (todos = todos.filter(todo => todo.id !== id));
+
+	$: todosRemaining = todos.filter(todo => !todo.completed).length;
 </script>
 
 <style lang="scss">
@@ -147,7 +149,7 @@
 
   <div class="extra-container">
     <div><label><input type="checkbox">Check All</label></div>
-    <div>3 items left</div>
+    <div>{todosRemaining} items left</div>
   </div>
 
   <div class="extra-container">
