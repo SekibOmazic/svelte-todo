@@ -135,8 +135,8 @@
 {#each todos as todo}
   <div class="todo-item">
     <div class="todo-item-left">
-      <input type="checkbox">
-      <div class="todo-item-label">{todo.title}</div>
+      <input type="checkbox" bind:checked={todo.completed}>
+      <div class="todo-item-label" class:completed={todo.completed}>{todo.title}</div>
     </div>
     <div class="remove-item" on:click={() => deleteTodo(todo.id)}>
       &times;
