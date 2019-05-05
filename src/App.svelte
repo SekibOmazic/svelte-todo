@@ -172,9 +172,9 @@
 
   <div class="extra-container">
     <div>
-      <button on:click={() => updateFilter('all')}>All</button>
-      <button on:click={() => updateFilter('active')}>Active</button>
-      <button on:click={() => updateFilter('completed')}>Completed</button>
+      <button on:click={() => updateFilter('all')} class:active="{currentFilter === 'all'}">All</button>
+      <button on:click={() => updateFilter('active')} class:active="{currentFilter === 'active'}">Active</button>
+      <button on:click={() => updateFilter('completed')} class:active="{currentFilter === 'completed'}">Completed</button>
     </div>
 
     <div>
