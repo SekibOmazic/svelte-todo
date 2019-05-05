@@ -43,6 +43,10 @@
 	  todos = todos.map(todo => ({ ...todo, completed: event.target.checked }));
 	};
 
+	const clearCompleted = () => {
+	  todos = todos.filter(todo => !todo.completed);
+	};
+
 	$: todosRemaining = todos.filter(todo => !todo.completed).length;
 </script>
 
@@ -164,7 +168,7 @@
     </div>
 
     <div>
-      <button>Clear Completed</button>
+      <button on:click={clearCompleted}>Clear Completed</button>
     </div>
   </div>
 </div>
