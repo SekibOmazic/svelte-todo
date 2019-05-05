@@ -86,6 +86,8 @@
 
 <script>
 	import { onMount } from "svelte";
+	import { fade } from "svelte/transition";
+	import { fly } from "svelte/transition";
 
 	let newTodo = "";
 	let tempId = 4;
@@ -190,7 +192,7 @@
 
 {#each filteredTodos as todo}
   <div class="todo-item">
-    <div class="todo-item-left">
+    <div class="todo-item-left" transition:fly="{{ y: 20, duration: 300 }}">
       <input type="checkbox" bind:checked={todo.completed} />
       {#if !todo.editing}
       <div class="todo-item-label" class:completed={todo.completed} on:dblclick={() => editTodo(todo)}>{todo.title}</div>
