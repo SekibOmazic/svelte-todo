@@ -88,6 +88,7 @@
 	let newTodo = "";
 	let tempId = 4;
 	let currentFilter = "all";
+	let beforeEditCache = "";
 
 	let todos = [
 	  {
@@ -137,12 +138,16 @@
 	const updateFilter = filter => (currentFilter = filter);
 
 	const editTodo = todo => {
+	  beforeEditCache = todo.title;
 	  todo.editing = true;
 	  // reasign causes new render
 	  todos = todos;
 	};
 
 	const doneEdit = todo => {
+	  if (todo.title.trim() === "") {
+	    todo.title = beforeEditCache;
+	  }
 	  todo.editing = false;
 	  // reasign causes new render
 	  todos = todos;
@@ -151,6 +156,11 @@
 	const doneEditKeydown = (todo, event) => {
 	  if (event.key === "Enter") {
 	    doneEdit(todo);
+	  }
+	  if (event.key === "Escape") {
+	    todo.title = beforeEditCache;
+	    todo.editing = false;
+	    todos = todos;
 	  }
 	};
 
