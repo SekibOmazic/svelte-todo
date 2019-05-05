@@ -9,12 +9,6 @@
     height: 75px;
   }
 
-  .todo-input {
-    width: 100%;
-    padding: 10px 18px;
-    font-size: 18px;
-    margin-bottom: 16px;
-  }
   .todo-item {
     margin-bottom: 12px;
     display: flex;
@@ -55,39 +49,16 @@
     text-decoration: line-through;
     color: grey;
   }
-  .extra-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 16px;
-    border-top: 1px solid lightgrey;
-    padding-top: 14px;
-    margin-bottom: 14px;
-
-    input {
-      margin-right: 8px;
-    }
-  }
-  button {
-    font-size: 14px;
-    background-color: white;
-    appearance: none;
-    &:hover {
-      background: salmon;
-    }
-    &:focus {
-      outline: none;
-    }
-  }
-  .active {
-    background: salmon;
-  }
 </style>
 
 <script>
 	import { onMount } from "svelte";
 	import { fade } from "svelte/transition";
 	import { fly } from "svelte/transition";
+
+	import AddTodo from "./AddTodo.svelte";
+	import Footer from "./Footer.svelte";
+	import Remaining from "./Remaining.svelte";
 
 	let newTodo = "";
 	let tempId = 4;
@@ -116,18 +87,20 @@
 	];
 
 	const addTodo = event => {
-	  if (event.key === "Enter") {
-	    const todo = {
-	      id: tempId,
-	      title: event.target.value,
-	      completed: false,
-	      editing: false
-	    };
-	    todos = [...todos, todo];
-	    newTodo = "";
-	    tempId = tempId + 1;
-	  }
+	  const { title } = event.detail;
+	  const todo = {
+	    id: tempId,
+	    title,
+	    completed: false,
+	    editing: false
+	  };
+	  todos = [...todos, todo];
+	  newTodo = "";
+	  tempId = tempId + 1;
 	};
+
+	// just to re-render
+	const toggle = todo => (todos = todos);
 
 	const deleteTodo = id => (todos = todos.filter(todo => todo.id !== id));
 
@@ -185,15 +158,14 @@
 </script>
 
 <div class="container">
-  <img src={'/img/svelte-logo-horizontal.svg'} alt="svelte logo" class="logo">
+  <img src={'img/svelte-logo-horizontal.svg'} alt="svelte logo" class="logo">
 
-  <input type="text" class="todo-input" placeholder="What needs to be done"
-  bind:value={newTodo} on:keydown={addTodo}>
+  <AddTodo on:addTodo={addTodo} />
 
 {#each filteredTodos as todo}
   <div class="todo-item">
     <div class="todo-item-left" transition:fly="{{ y: 20, duration: 300 }}">
-      <input type="checkbox" bind:checked={todo.completed} />
+      <input type="checkbox" bind:checked={todo.completed} on:change={() => toggle(todo)} />
       {#if !todo.editing}
       <div class="todo-item-label" class:completed={todo.completed} on:dblclick={() => editTodo(todo)}>{todo.title}</div>
       {:else}
@@ -204,23 +176,16 @@
       &times;
     </div>
   </div>
-  {/each}
+{/each}
 
+  <Remaining todosRemaining={todosRemaining} on:checkAll={()=> checkAllTodos(event)}/>
 
-  <div class="extra-container">
-    <div><label><input type="checkbox" on:change={checkAllTodos}>Check All</label></div>
-    <div>{todosRemaining} items left</div>
-  </div>
+  <Footer
+    currentFilter={currentFilter}
+    on:showAll={() => updateFilter('all')}
+    on:showActive={() => updateFilter('active')}
+    on:showCompleted={() => updateFilter('completed')}
+    on:clearCompleted={clearCompleted}
+  />
 
-  <div class="extra-container">
-    <div>
-      <button on:click={() => updateFilter('all')} class:active="{currentFilter === 'all'}">All</button>
-      <button on:click={() => updateFilter('active')} class:active="{currentFilter === 'active'}">Active</button>
-      <button on:click={() => updateFilter('completed')} class:active="{currentFilter === 'completed'}">Completed</button>
-    </div>
-
-    <div>
-      <button on:click={clearCompleted}>Clear Completed</button>
-    </div>
-  </div>
 </div>
