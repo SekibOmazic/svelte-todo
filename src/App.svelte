@@ -1,65 +1,3 @@
-<script>
-	let newTodo = "";
-	let tempId = 4;
-	let currentFilter = "all";
-
-	let todos = [
-	  {
-	    id: 1,
-	    title: "Learn Svelte",
-	    completed: false,
-	    editing: false
-	  },
-	  {
-	    id: 2,
-	    title: "Learn GraphQl",
-	    completed: false,
-	    editing: false
-	  },
-	  {
-	    id: 3,
-	    title: "Learn Flutter",
-	    completed: false,
-	    editing: false
-	  }
-	];
-
-	const addTodo = event => {
-	  if (event.key === "Enter") {
-	    const todo = {
-	      id: tempId,
-	      title: event.target.value,
-	      completed: false,
-	      editing: false
-	    };
-	    todos = [...todos, todo];
-	    newTodo = "";
-	    tempId = tempId + 1;
-	  }
-	};
-
-	const deleteTodo = id => (todos = todos.filter(todo => todo.id !== id));
-
-	const checkAllTodos = event => {
-	  todos = todos.map(todo => ({ ...todo, completed: event.target.checked }));
-	};
-
-	const clearCompleted = () => {
-	  todos = todos.filter(todo => !todo.completed);
-	};
-
-	const updateFilter = filter => (currentFilter = filter);
-
-	$: todosRemaining = todos.filter(todo => !todo.completed).length;
-
-	$: filteredTodos =
-	  currentFilter === "all"
-	    ? todos
-	    : currentFilter === "completed"
-	    ? todos.filter(todo => todo.completed)
-	    : todos.filter(todo => !todo.completed);
-</script>
-
 <style lang="scss">
   .container {
     max-width: 600px;
@@ -146,6 +84,86 @@
   }
 </style>
 
+<script>
+	let newTodo = "";
+	let tempId = 4;
+	let currentFilter = "all";
+
+	let todos = [
+	  {
+	    id: 1,
+	    title: "Learn Svelte",
+	    completed: false,
+	    editing: false
+	  },
+	  {
+	    id: 2,
+	    title: "Learn GraphQl",
+	    completed: false,
+	    editing: false
+	  },
+	  {
+	    id: 3,
+	    title: "Learn Flutter",
+	    completed: false,
+	    editing: false
+	  }
+	];
+
+	const addTodo = event => {
+	  if (event.key === "Enter") {
+	    const todo = {
+	      id: tempId,
+	      title: event.target.value,
+	      completed: false,
+	      editing: false
+	    };
+	    todos = [...todos, todo];
+	    newTodo = "";
+	    tempId = tempId + 1;
+	  }
+	};
+
+	const deleteTodo = id => (todos = todos.filter(todo => todo.id !== id));
+
+	const checkAllTodos = event => {
+	  todos = todos.map(todo => ({ ...todo, completed: event.target.checked }));
+	};
+
+	const clearCompleted = () => {
+	  todos = todos.filter(todo => !todo.completed);
+	};
+
+	const updateFilter = filter => (currentFilter = filter);
+
+	const editTodo = todo => {
+	  todo.editing = true;
+	  // reasign causes new render
+	  todos = todos;
+	};
+
+	const doneEdit = todo => {
+	  todo.editing = false;
+	  // reasign causes new render
+	  todos = todos;
+	};
+
+	const doneEditKeydown = (todo, event) => {
+	  if (event.key === "Enter") {
+	    doneEdit(todo);
+	  }
+	};
+
+	$: todosRemaining = todos.filter(todo => !todo.completed).length;
+
+	$: filteredTodos =
+	  currentFilter === "all"
+	    ? todos
+	    : currentFilter === "completed"
+	    ? todos.filter(todo => todo.completed)
+	    : todos.filter(todo => !todo.completed);
+</script>
+
 <div class="container">
   <img src={'/img/svelte-logo-horizontal.svg'} alt="svelte logo" class="logo">
 
@@ -155,8 +173,12 @@
 {#each filteredTodos as todo}
   <div class="todo-item">
     <div class="todo-item-left">
-      <input type="checkbox" bind:checked={todo.completed}>
-      <div class="todo-item-label" class:completed={todo.completed}>{todo.title}</div>
+      <input type="checkbox" bind:checked={todo.completed} />
+      {#if !todo.editing}
+      <div class="todo-item-label" class:completed={todo.completed} on:dblclick={() => editTodo(todo)}>{todo.title}</div>
+      {:else}
+      <input class="todo-item-edit" type="text" bind:value={todo.title} on:blur={() => doneEdit(todo)} on:keydown={() => doneEditKeydown(todo, event)} autofocus />
+      {/if}
     </div>
     <div class="remove-item" on:click={() => deleteTodo(todo.id)}>
       &times;
