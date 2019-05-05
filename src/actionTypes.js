@@ -1,6 +1,8 @@
 export const addTodo = "addTodo";
-export const TOGGLE_TODO = "TOGGLE_TODO";
-export const DELETE_TODO = "DELETE_TODO";
+export const editTodo = "editTodo";
+export const doneEditing = "doneEditing";
+export const deleteTodo = "deleteTodo";
+export const toggle = "toggle";
 
 export const showAll = "showAll";
 export const showActive = "showActive";
