@@ -39,6 +39,10 @@
 
 	const deleteTodo = id => (todos = todos.filter(todo => todo.id !== id));
 
+	const checkAllTodos = event => {
+	  todos = todos.map(todo => ({ ...todo, completed: event.target.checked }));
+	};
+
 	$: todosRemaining = todos.filter(todo => !todo.completed).length;
 </script>
 
@@ -148,7 +152,7 @@
 
 
   <div class="extra-container">
-    <div><label><input type="checkbox">Check All</label></div>
+    <div><label><input type="checkbox" on:change={checkAllTodos}>Check All</label></div>
     <div>{todosRemaining} items left</div>
   </div>
 
