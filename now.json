@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "svelte-todo",
+  "alias": ["omazic.dev"],
+  "builds": [
+    {
+      "config": { "distDir": "public" }
+    }
+  ]
+}
