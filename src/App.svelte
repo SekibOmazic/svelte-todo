@@ -85,6 +85,8 @@
 </style>
 
 <script>
+	import { onMount } from "svelte";
+
 	let newTodo = "";
 	let tempId = 4;
 	let currentFilter = "all";
@@ -163,6 +165,12 @@
 	    todos = todos;
 	  }
 	};
+
+	onMount(async () => {
+	  const res = await fetch("https://api.chucknorris.io/jokes/random");
+	  const response = await res.json();
+	  console.log(response.value);
+	});
 
 	$: todosRemaining = todos.filter(todo => !todo.completed).length;
 
