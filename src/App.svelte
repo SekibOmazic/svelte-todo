@@ -1,6 +1,7 @@
 <script>
 	let newTodo = "";
 	let tempId = 4;
+	let currentFilter = "all";
 
 	let todos = [
 	  {
@@ -47,7 +48,16 @@
 	  todos = todos.filter(todo => !todo.completed);
 	};
 
+	const updateFilter = filter => (currentFilter = filter);
+
 	$: todosRemaining = todos.filter(todo => !todo.completed).length;
+
+	$: filteredTodos =
+	  currentFilter === "all"
+	    ? todos
+	    : currentFilter === "completed"
+	    ? todos.filter(todo => todo.completed)
+	    : todos.filter(todo => !todo.completed);
 </script>
 
 <style lang="scss">
@@ -142,7 +152,7 @@
   <input type="text" class="todo-input" placeholder="What needs to be done"
   bind:value={newTodo} on:keydown={addTodo}>
 
-{#each todos as todo}
+{#each filteredTodos as todo}
   <div class="todo-item">
     <div class="todo-item-left">
       <input type="checkbox" bind:checked={todo.completed}>
@@ -162,9 +172,9 @@
 
   <div class="extra-container">
     <div>
-      <button>All</button>
-      <button>Active</button>
-      <button>Completed</button>
+      <button on:click={() => updateFilter('all')}>All</button>
+      <button on:click={() => updateFilter('active')}>Active</button>
+      <button on:click={() => updateFilter('completed')}>Completed</button>
     </div>
 
     <div>
