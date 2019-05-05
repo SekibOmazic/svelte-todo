@@ -1,4 +1,4 @@
-See it in action [here](https://svelte-todo.sekibomazic.now.sh/public/)
+See it in action [here](https://svelte-todo.sekibomazic.now.sh)
 
 ---
 
