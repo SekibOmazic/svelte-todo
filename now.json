@@ -1,9 +1,11 @@
 {
   "version": 2,
   "name": "svelte-todo",
-  "alias": ["omazic.dev"],
+  "alias": "svelte-todo.sekibomazic.now.sh",
   "builds": [
     {
+      "src": "package.json",
+      "use": "@now/static-build",
       "config": { "distDir": "public" }
     }
   ]
